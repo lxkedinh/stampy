@@ -9,22 +9,25 @@ import (
 type CommandHandler func(s *discordgo.Session, i *discordgo.InteractionCreate) error
 
 var commandHandlers = map[string]CommandHandler{
-	Timestamp.Name: HandleTimestamp,
+	Timestamp.Name: HandleTimestampCmd,
 }
 
 func InitCommandHandlers(s *discordgo.Session) {
 	s.AddHandler(func(s *discordgo.Session, i *discordgo.InteractionCreate) {
+		if i.Type != discordgo.InteractionApplicationCommand {
+			return
+		}
 		if handler, ok := commandHandlers[i.ApplicationCommandData().Name]; ok {
 			err := handler(s, i)
 			if err != nil {
 				log.Println(err)
-				handleCommandError(s, i)
+				handleInteractionError(s, i)
 			}
 		}
 	})
 }
 
-func handleCommandError(s *discordgo.Session, i *discordgo.InteractionCreate) {
+func handleInteractionError(s *discordgo.Session, i *discordgo.InteractionCreate) {
 	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
