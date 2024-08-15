@@ -7,13 +7,19 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/lxkedinh/stampy/commands"
+	"github.com/lxkedinh/stampy/db"
 	"github.com/lxkedinh/stampy/env"
+	"github.com/lxkedinh/stampy/modals"
 )
 
 var session *discordgo.Session
 
 func init() {
 	env.Load("./.env")
+}
+
+func init() {
+	db.InitRedisClient()
 }
 
 func init() {
@@ -27,6 +33,7 @@ func init() {
 
 func init() {
 	commands.InitCommandHandlers(session)
+	modals.InitModalSubmitHandlers(session)
 }
 
 func main() {
