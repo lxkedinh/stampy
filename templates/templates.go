@@ -1,11 +1,11 @@
-package tmpl
+package templates
 
 import (
 	"log"
 	"text/template"
 )
 
-var Timestamp = loadFromFile("tmpl/timestamp.tmpl")
+var Timestamp = loadFromFile("templates/timestamp.tmpl")
 
 func loadFromFile(fileName string) *template.Template {
 	tmpl, err := template.ParseFiles(fileName)
